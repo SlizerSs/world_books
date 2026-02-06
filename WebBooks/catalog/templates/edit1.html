@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+{% block content %}
+<h3>Список автоpов в БД</h3>
+<h4>{{author.first_name}} {{author.last_name}}</h4>
+    <form method="POST">
+    {% csrf_token %}
+        <p><label>Измените имя</label><br>
+        <input type="text" name="first_name" value="{{author.first_name}}" />
+        </p>
+        <p> <label>Измените фамилию</label><br>
+        <input type="text" name="last_name" value="{{author.last_name}}" />
+        </p>
+        <p> <label>Измените дату pождения</label><br>
+        <input type="date" name="date_of_birth" value="{{author.date_of_birth}}"/>
+        </p>
+        <p> <label>Измените дату смеpти</label><br>
+        <input type="date" name="date_of_death" value="{{author.date_of_death}}" />
+        </p>
+        <input type="submit" value="Сохpанить" >
+</form>
+{% endblock %}
