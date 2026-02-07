@@ -2,8 +2,27 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from .models import Book, Author, BookInstance
 from django.views import generic
+from django.urls import reverse_lazy 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AuthorsForm
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+
+class BookCreate(CreateView):
+    model = Book
+    fields = '__all__' 
+    success_url = reverse_lazy('books')
+
+
+class BookUpdate(UpdateView):
+    model = Book 
+    fields = '__all__' 
+    success_url = reverse_lazy('books')
+
+
+class BookDelete(DeleteView):
+    model = Book 
+    success_url = reverse_lazy ('books')
 
 
 class BookListView(generic.ListView):

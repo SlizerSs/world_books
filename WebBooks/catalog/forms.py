@@ -1,5 +1,7 @@
 from django import forms
 from datetime import date
+from django.forms import ModelForm 
+from .models import Book 
 
 
 class AuthorsForm (forms.Form):
@@ -13,3 +15,9 @@ class AuthorsForm (forms.Form):
                                     initial=format(date.today()),
                                     widget=forms.widgets.DateInput(
                                         attrs={'type': 'date'}))
+
+
+class BookModelForm(ModelForm): 
+    class Meta: 
+        model = Book 
+        fields = ['title', 'genre', 'language', 'author', 'summary', 'isbn'] 

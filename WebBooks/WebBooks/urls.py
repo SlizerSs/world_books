@@ -18,4 +18,7 @@ urlpatterns = [
     path('edit1/<int:id>/', views.edit1, name='edit1'),
     path('create/', views.create, name='create'),
     path('delete/<int:id>/', views.delete, name='delete'),
+    re_path(r'^book/create/$', views.BookCreate.as_view(), name='book_create'),
+    re_path(r'^book/update/(?P<pk>\d+)$', views.BookUpdate.as_view(), name='book_update'), 
+    re_path(r'^book/delete/(?P<pk>\d+)$', views.BookDelete.as_view(), name='book_delete'),
 ]
