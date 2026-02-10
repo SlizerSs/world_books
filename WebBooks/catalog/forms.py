@@ -1,10 +1,10 @@
 from django import forms
 from datetime import date
-from django.forms import ModelForm 
-from .models import Book 
+from django.forms import ModelForm
+from .models import Book, BookInstance
 
 
-class AuthorsForm (forms.Form):
+class AuthorsForm(forms.Form):
     first_name = forms.CharField(label="Имя автора")
     last_name = forms.CharField(label="Фамилия автора")
     date_of_birth = forms.DateField(label="Дaтa рождения",
@@ -17,7 +17,18 @@ class AuthorsForm (forms.Form):
                                         attrs={'type': 'date'}))
 
 
-class BookModelForm(ModelForm): 
-    class Meta: 
-        model = Book 
-        fields = ['title', 'genre', 'language', 'author', 'summary', 'isbn'] 
+class BookInstanceForm(ModelForm):
+    class Meta:
+        model = BookInstance
+        fields = ['book', 'inv_num',
+                  'imprint', 'status',
+                  'due_back', 'borrower',
+                  'postup_date']
+
+
+class BookModelForm(ModelForm):
+    class Meta:
+        model = Book
+        fields = ['title', 'genre',
+                  'language', 'author',
+                  'summary', 'isbn']

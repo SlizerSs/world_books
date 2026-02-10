@@ -1,0 +1,9 @@
+{% extends "base_generic.html" %} 
+{% block content %}
+<hl>Удаление экземпляpа книги</hl> 
+<p> Вы уверены, что хотите удалить экзепляр книги: {{ bookinstance }}?</p> 
+<form action="" method="POST"> 
+{% csrf_token %}
+<input type="submit" action='"' value="Дa, удалить" /> 
+</form> 
+{% endblock %}

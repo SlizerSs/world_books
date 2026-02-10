@@ -2,32 +2,49 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponseNotFound
 from .models import Book, Author, BookInstance
 from django.views import generic
-from django.urls import reverse_lazy 
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AuthorsForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
+class BookInstanceCreate(CreateView):
+    model = BookInstance
+    fields = '__all__'
+    success_url = reverse_lazy('books')
+
+
+class BookInstanceUpdate(UpdateView):
+    model = BookInstance
+    fields = '__all__'
+    success_url = reverse_lazy('books')
+
+
+class BookInstanceDelete(DeleteView):
+    model = BookInstance
+    success_url = reverse_lazy('books')
+
+
 class BookCreate(CreateView):
     model = Book
-    fields = '__all__' 
+    fields = '__all__'
     success_url = reverse_lazy('books')
 
 
 class BookUpdate(UpdateView):
-    model = Book 
-    fields = '__all__' 
+    model = Book
+    fields = '__all__'
     success_url = reverse_lazy('books')
 
 
 class BookDelete(DeleteView):
-    model = Book 
-    success_url = reverse_lazy ('books')
+    model = Book
+    success_url = reverse_lazy('books')
 
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 3
+    paginate_by = 10
 
 
 class BookDetailView(generic.DetailView):
@@ -66,6 +83,13 @@ def index(request):
                            'num_instances_available': num_instances_available,
                            'num_authors': num_authors,
                            'num_visits': num_visits,
+                           })
+
+
+def catalog_info(request):
+    books = Book.objects.all()
+    return render(request, 'catalog/catalog_info.html',
+                  context={'book_list': books,
                            })
 
 

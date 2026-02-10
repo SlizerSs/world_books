@@ -112,6 +112,10 @@ class BookInstance(models.Model):
                                  blank=True,
                                  help_text="Заказчик",
                                  verbose_name="Выберите заказчика книги")
+    postup_date = models.DateField(null=True,
+                                   blank=True,
+                                   help_text="Дата поступления",
+                                   verbose_name="Выберите дату поступления экземпляра книги")
 
     @property
     def is_overdue(self):
