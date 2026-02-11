@@ -81,8 +81,16 @@ class BookListView(generic.ListView):
     paginate_by = 10
 
 
-class BookDetailView(generic.DetailView):
+class BookDetailView(generic.DetailView, generic.list.MultipleObjectMixin):
     model = Book
+    paginate_by = 3
+
+    def get_context_data(self, **kwargs):
+        object_list = BookInstance.objects.filter(book=self.get_object())
+        context = super(BookDetailView, self).get_context_data(
+            object_list=object_list,
+            **kwargs)
+        return context
 
 
 class AuthorListView(generic.ListView):
@@ -131,8 +139,10 @@ def catalog_info(request):
     """Представление для отображения некоторой информации по сайту"""
 
     books = Book.objects.all()
+    authors = Author.objects.all()
     return render(request, 'catalog/catalog_info.html',
-                  context={'book_list': books})
+                  context={'book_list': books,
+                           'authors': authors})
 
 
 def authors_add(request):
