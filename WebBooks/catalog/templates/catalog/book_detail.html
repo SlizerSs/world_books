@@ -12,10 +12,11 @@
 </p>
 <div style="margin-left:20px;margin-top:20px">
     <h4>Количество экземпляpов книг в БД</h4>
+    <p><a href="{% url 'book_book_instance_create' book.id %}">Создать экземпляр</a></p>
     {% for copy in book.bookinstance_set.all %}
         <hr>
-        <a href="/book_instance/update/{{copy.id}}">Измeнить экземпляр</a>, 
-        <a href="/book_instance/delete/{{copy.id}}">Удалить экземпляр</a>
+        <a href="{% url 'book_instance_update' book.id copy.id %}">Измeнить экземпляр</a>, 
+        <a href="{% url 'book_instance_delete' book.id copy.id %}">Удалить экземпляр</a>
         <p class="{% if copy.status == 1 %} text-success
         {% elif copy.status == 2 %} text-danger
         {% else %} text-warning

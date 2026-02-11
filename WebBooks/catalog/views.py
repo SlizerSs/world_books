@@ -8,6 +8,28 @@ from .forms import AuthorsForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 
+class BookInstanceCreateFromBook(CreateView):
+    model = BookInstance
+    fields = '__all__'
+    success_url = reverse_lazy('books')
+
+    def get_initial(self):
+        """Добавляет в initial объект Book"""
+
+        initial = super().get_initial()
+        book_id = self.kwargs.get('book_id')
+        book = Book.objects.get(id=book_id)
+        self.book = book
+        initial['book'] = book
+        return initial
+
+    def get_success_url(self):
+        """Редирект на страницу с конкретной Book"""
+
+        return reverse_lazy('book-detail', kwargs={
+            'pk': self.object.book.pk})
+
+
 class BookInstanceCreate(CreateView):
     model = BookInstance
     fields = '__all__'
@@ -17,12 +39,24 @@ class BookInstanceCreate(CreateView):
 class BookInstanceUpdate(UpdateView):
     model = BookInstance
     fields = '__all__'
-    success_url = reverse_lazy('books')
+
+    def get_success_url(self):
+        book_id = self.kwargs.get('book_id')
+        book = Book.objects.get(id=book_id)
+        self.book = book
+        return reverse_lazy('book-detail', kwargs={
+            'pk': self.object.book.pk})
 
 
 class BookInstanceDelete(DeleteView):
     model = BookInstance
-    success_url = reverse_lazy('books')
+
+    def get_success_url(self):
+        book_id = self.kwargs.get('book_id')
+        book = Book.objects.get(id=book_id)
+        self.book = book
+        return reverse_lazy('book-detail', kwargs={
+            'pk': self.object.book.pk})
 
 
 class BookCreate(CreateView):
@@ -57,17 +91,24 @@ class AuthorListView(generic.ListView):
 
 
 class LoanedBooksByUserListView(generic.ListView, LoginRequiredMixin):
+    """Представление для отображения списка забронированных
+    экземплров книг для конкретного пользователя"""
+
     model = BookInstance
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
     def get_queryset(self):
+        """Возвращает отсортированный список экземпляров книг по их статусу"""
+
         return BookInstance.objects.filter(
             borrower=self.request.user).filter(
                 status__exact='2').order_by('due_back')
 
 
 def index(request):
+    """Представление начальной страницы сайта"""
+
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
     num_instances_available = BookInstance.objects.filter(
@@ -87,13 +128,17 @@ def index(request):
 
 
 def catalog_info(request):
+    """Представление для отображения некоторой информации по сайту"""
+
     books = Book.objects.all()
     return render(request, 'catalog/catalog_info.html',
-                  context={'book_list': books,
-                           })
+                  context={'book_list': books})
 
 
 def authors_add(request):
+    """Представление для отображения списка Author
+    и формой добавления нового Author"""
+
     author = Author.objects.all()
     authorsform = AuthorsForm()
     return render(request,
@@ -102,6 +147,8 @@ def authors_add(request):
 
 
 def create(request):
+    """Представление для добавления Author в БД"""
+
     if request.method == "POST":
         author = Author()
         author.first_name = request.POST.get("first_name")
@@ -113,6 +160,8 @@ def create(request):
 
 
 def delete(request, id):
+    """Представление для удаления Author из БД"""
+
     try:
         author = Author.objects.get(id=id)
         author.delete()
@@ -122,6 +171,8 @@ def delete(request, id):
 
 
 def edit1(request, id):
+    """Представление для изменения полей Author в БД"""
+
     author = Author.objects.get(id=id)
     if request.method == "POST":
         author.first_name = request.POST.get("first_name")

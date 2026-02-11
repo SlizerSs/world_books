@@ -5,6 +5,8 @@ from .models import Book, BookInstance
 
 
 class AuthorsForm(forms.Form):
+    """класс формы для модели Author"""
+
     first_name = forms.CharField(label="Имя автора")
     last_name = forms.CharField(label="Фамилия автора")
     date_of_birth = forms.DateField(label="Дaтa рождения",
@@ -18,6 +20,8 @@ class AuthorsForm(forms.Form):
 
 
 class BookInstanceForm(ModelForm):
+    """класс формы для модели BookInstance"""
+
     class Meta:
         model = BookInstance
         fields = ['book', 'inv_num',
@@ -27,6 +31,8 @@ class BookInstanceForm(ModelForm):
 
 
 class BookModelForm(ModelForm):
+    """класс формы для модели Book"""
+
     class Meta:
         model = Book
         fields = ['title', 'genre',

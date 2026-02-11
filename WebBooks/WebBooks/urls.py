@@ -16,11 +16,13 @@ urlpatterns = [
             name='my_borrowed'),
     path('catalog_info/', views.catalog_info, name='catalog_info'),
 
+    # пути для crud операций с авторами
     path('authors_add/', views.authors_add, name='authors_add'),
     path('edit1/<int:id>/', views.edit1, name='edit1'),
     path('create/', views.create, name='create'),
     path('delete/<int:id>/', views.delete, name='delete'),
 
+    # пути для crud операций с книгами
     re_path(r'^book/create/$',
             views.BookCreate.as_view(),
             name='book_create'),
@@ -30,14 +32,17 @@ urlpatterns = [
     re_path(r'^book/delete/(?P<pk>\d+)$',
             views.BookDelete.as_view(),
             name='book_delete'),
-
+    # пути для crud операций с экземплярами книг
     re_path(r'^book_instance/create/$',
             views.BookInstanceCreate.as_view(),
             name='book_instance_create'),
-    re_path(r'^book_instance/update/(?P<pk>\d+)$',
+    re_path(r'^book/(?P<book_id>\d+)/book_instance/update/(?P<pk>\d+)$',
             views.BookInstanceUpdate.as_view(),
             name='book_instance_update'),
-    re_path(r'^book_instance/delete/(?P<pk>\d+)$',
+    re_path(r'^book/(?P<book_id>\d+)/book_instance/delete/(?P<pk>\d+)$',
             views.BookInstanceDelete.as_view(),
             name='book_instance_delete'),
+    re_path(r'^book/(?P<book_id>\d+)/book_instance/create/$',
+            views.BookInstanceCreateFromBook.as_view(),
+            name='book_book_instance_create'),
 ]
