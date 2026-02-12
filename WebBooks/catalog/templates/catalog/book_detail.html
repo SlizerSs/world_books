@@ -13,7 +13,6 @@
 <div style="margin-left:20px;margin-top:20px">
     <h4>Количество экземпляpов книг в БД</h4>
     <p><a href="{% url 'book_book_instance_create' book.id %}">Создать экземпляр</a></p>
-    {% if is_paginated %}
         {% for copy in object_list %}
             <hr>
             <a href="{% url 'book_instance_update' book.id copy.id %}">Измeнить экземпляр</a>, 
@@ -27,6 +26,5 @@
             <p><strong>Cтaтyc экземпляpа книги в БД:</strong> {{copy.status}}</p>
             <p>Дата поступления {{copy.postup_date}}</p>
         {% endfor %}
-    {% endif %}
 </div>
 {% endblock %}

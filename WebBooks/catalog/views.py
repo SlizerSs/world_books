@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import AuthorsForm
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.db.models import Count, Prefetch
 
 
 class BookInstanceCreateFromBook(CreateView):
@@ -138,11 +139,23 @@ def index(request):
 def catalog_info(request):
     """Представление для отображения некоторой информации по сайту"""
 
-    books = Book.objects.all()
-    authors = Author.objects.all()
+    books = Book.objects.values('id', 'title').annotate(
+        instance_count=Count('bookinstance')
+    )
+    authors = Author.objects.prefetch_related(
+        Prefetch(
+                "books",
+                queryset=Book.objects.all(),
+                to_attr="author_books",
+        )
+    ).annotate(
+        book_count=Count('books')
+    ).all()
+
     return render(request, 'catalog/catalog_info.html',
                   context={'book_list': books,
-                           'authors': authors})
+                           'authors': authors,
+                           })
 
 
 def authors_add(request):
